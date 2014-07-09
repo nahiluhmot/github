@@ -2,12 +2,18 @@
 
 module Github
   class Client::Repos::Deployments < API
-
     VALID_DEPLOYMENTS_OPTIONS = %w[
       ref
-      force
-      payload
       auto_merge
+      required_contexts
+      payload
+      environment
+      description
+    ]
+
+    VALID_STATUS_OPTIONS = %w[
+    state
+      target_url
       description
     ]
 
@@ -97,6 +103,7 @@ module Github
     def create_status(*args)
       arguments(args, :required => [:user, :repo, :id]) do
         assert_required %w[ state ]
+        sift VALID_STATUS_OPTIONS
       end
 
       params = arguments.params
